@@ -1,0 +1,32 @@
+Show tables;
+Select count(*) from Collaborator;
+Select count(*) from Orders;
+Select count(*) from RMA;
+
+
+
+SELECT Collaborator.State AS State, COUNT(*) AS Return_Frequency
+    -> FROM Orders 
+    -> INNER JOIN RMA ON Orders.OrderID = RMA.OrderID
+    -> INNER JOIN Collaborator ON Collaborator.CollaboratorID = Orders.CollaboratorID
+    -> GROUP BY State
+    -> ORDER BY Return_Frequency DESC
+    -> LIMIT 15;
+
+
+
+SELECT Orders.SKU,
+    ->        MAX(Orders.Description) AS Description,
+    ->        (COUNT(*) * 100 / (SELECT COUNT(*) FROM Orders
+    ->                            INNER JOIN RMA ON Orders.OrderID = RMA.OrderID))
+    ->        AS Return_Percent
+
+
+
+    -> FROM Orders
+    -> INNER JOIN RMA ON Orders.OrderID = RMA.OrderID
+    -> GROUP BY SKU
+    -> ORDER BY Return_Percent DESC;
+
+
+
